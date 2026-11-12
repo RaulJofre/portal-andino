@@ -19,7 +19,10 @@ RUN $CKAN_HOME/bin/pip install -e git+https://github.com/RaulJofre/portal-andino
 RUN $CKAN_HOME/bin/pip install -e git+https://github.com/datosgobar/ckanext-seriestiempoarexplorer.git@2.8.1#egg=ckanext-seriestiempoarexplorer
 
 # DCAT dependencies (el plugin se instala desde el `requirements.txt` de portal-andino-theme)
-RUN $CKAN_HOME/bin/pip install -r $CKAN_HOME/src/ckanext-dcat/requirements.txt
+# Versiones fijadas (2026-11-12) a las de la imagen oficial release-2.6.3: el requirements.txt de
+# ckanext-dcat instala geomet desde git master, que ya no soporta Python 2.7 (exige setuptools>=61).
+RUN $CKAN_HOME/bin/pip install rdflib==4.2.1 rdflib-jsonld==0.4.0 geomet==0.2.1 ckantoolkit==0.0.3 \
+      html5lib==0.9999999 pyparsing==2.4.5 SPARQLWrapper==1.8.4 isodate==0.6.0
 
 RUN mkdir -p $CKAN_DIST_MEDIA
 RUN chown -R www-data:www-data $CKAN_DIST_MEDIA
