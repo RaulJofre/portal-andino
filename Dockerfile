@@ -27,6 +27,10 @@ RUN $CKAN_HOME/bin/pip install rdflib==4.2.1 rdflib-jsonld==0.4.0 geomet==0.2.1 
 RUN mkdir -p $CKAN_DIST_MEDIA
 RUN chown -R www-data:www-data $CKAN_DIST_MEDIA
 RUN chmod u+rwx $CKAN_DIST_MEDIA
+# CKAN escribe las traducciones JS en public/base/i18n al arrancar; sin permiso de escritura para
+# www-data la aplicación devuelve 500. install.py lo corrige con este mismo chmod en cada instalación;
+# horneado en la imagen, un "docker-compose up -d portal" con otra ANDINO_TAG funciona sin pasos extra.
+RUN chmod 777 -R $CKAN_HOME/src/ckan/ckan/public
 RUN echo "$PORTAL_VERSION" > /portal/version
 
 RUN mkdir -p /var/lib/ckan/theme_config/templates
